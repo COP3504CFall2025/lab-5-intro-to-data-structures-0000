@@ -75,21 +75,53 @@ public:
 }
 	void Clear() {
 	Node* cur = head;
-    while (cur) {
-        delete cur;
+    while (cur != nullptr) {
+    	Node* next = cur->next;
+		delete next;
 		cur = cur->next;
     }
+	head = nullptr;
+	tail = nullptr;
 }
 
 	// Operators
-	LinkedList<T>& operator=(LinkedList<T>&& other) noexcept;
-	LinkedList<T>& operator=(const LinkedList<T>& rhs);
+//copy assignment
+	LinkedList<T>& operator=(LinkedList<T>&& other) noexcept {
+	if (this == &other) {
+		return *this;
+	}
+	head = move(other.head);
+	tail = move(other.tail);
+	other.head = nullptr;
+	other.tail = nullptr;
+	return *this;
+}
+//move assignment
+	LinkedList<T>& operator=(const LinkedList<T>& rhs) {
+	std::swap(head, other.head);
+    std::swap(tail, other.tail);
+    return *this;
+}
 
 	// Construction/Destruction
-	LinkedList();
-	LinkedList(const LinkedList<T>& list);
-	LinkedList(LinkedList<T>&& other) noexcept;
-	~LinkedList();
+	LinkedList() {
+	head = nullptr;
+	tail = nullptr;
+}
+	LinkedList(const LinkedList<T>& list) {
+	for (T& data : list) {
+		addHead(data);
+	}
+}
+	LinkedList(LinkedList<T>&& other) noexcept {
+	head = move(other.head);
+	tail = move(other.tail);
+	other.head = nullptr;
+	other.tail = nullptr;
+}
+	~LinkedList() {
+	Clear();
+}
 
 private:
 	// Stores pointers to first and last nodes and count
@@ -98,5 +130,3 @@ private:
 	unsigned int count;
 
 };
-
-
