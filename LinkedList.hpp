@@ -3,29 +3,83 @@
 using namespace std;
 
 
-
 template <typename T>
 class LinkedList {
 public:
 	// Behaviors
-	void printForward() const;
-	void printReverse() const;
+	void printForward() const {
+	if (!head) return;
+
+    Node* cur = head;
+    while (cur) {
+        cout << cur->data << " ";
+        cur = cur->next;
+    }
+    cout << endl;
+}
+	void printReverse() const {
+	if (!tail) return;
+	Node* cur = tail;
+	while (cur != nullptr) {
+		cout << cur->data << " ";
+		cur = cur->prev;
+	}
+}
 
 	// Accessors
-	[[nodiscard]] unsigned int getCount() const;
-	Node* getHead();
-	const Node* getHead() const;
-	Node* getTail();
-	const Node* getTail() const;
+	[[nodiscard]] unsigned int getCount() const {
+	if (head == nullptr) return 0;
+	Node* cur = head;
+	unsigned int count = 0;
+	while (cur != nullptr) {
+		cur = cur->next;
+		count++;
+	}
+	return count;
+}
+	Node* getHead() {
+	return head;
+}
+	const Node* getHead() const {
+	return head;
+}
+	Node* getTail() {
+	return tail;
+}
+	const Node* getTail() const {
+	return tail;
+}
 
 	// Insertion
-	void addHead(const T& data);
-	void addTail(const T& data);
+	void addHead(const T& data) {
+
+}
+	void addTail(const T& data) {
+
+}
 
 	// Removal
-	bool removeHead();
-	bool removeTail();
-	void Clear();
+	bool removeHead() {
+	if (head == nullptr) return false;
+	Node* cur = head;
+	head = cur->next;
+	delete cur;
+	return true;
+}
+	bool removeTail() {
+	if (tail == nullptr) return false;
+	Node* cur = tail;
+	tail = cur->prev;
+	delete cur;
+	return true;
+}
+	void Clear() {
+	Node* cur = head;
+    while (cur) {
+        delete cur;
+		cur = cur->next;
+    }
+}
 
 	// Operators
 	LinkedList<T>& operator=(LinkedList<T>&& other) noexcept;
