@@ -11,18 +11,45 @@ private:
     LinkedList<T> list;
 public:
     // Constructor
-    LLQ();
+    LLQ() : list(LinkedList<T>()) {}
 
     // Insertion
-    void enqueue(const T& item) override;
-
+    void enqueue(const T& item) override {
+		list.addTail(item);
+	}
     // Deletion
-    T dequeue() override;
+    T dequeue() override {
+		if (list.getCount() == 0) {
+			throw std::runtime__error("List is empty cannot pop element");
+		}
+
+		T headData = list.getHead()->data;
+
+		list.removeHead();
+		return headData;
+	}
 
     // Access
-    T peek() const override;
+    T peek() const override {
+		if (list.getCount() == 0) {
+			throw std::runtime_error("List is empty cannot pop element");
+		}
+
+		const Node<T>* head list.getHead();
+		return head->data;
+	}
 
     // Getter
-    std::size_t getSize() const noexcept override;
+    std::size_t getSize() const noexcept override {
+		return list.getCount();
+	}
+
+	void printForward() const {
+		list.printForward();
+	}
+
+	void printReverse() const {
+		list.printReverse();
+	}
 
 };
