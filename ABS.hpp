@@ -10,131 +10,127 @@ using std::size_t;
 template<typename T>
 class ABS : public StackInterface<T> {
 public:
-    // Big 5 + Parameterized Constructor
-    ABS() : capacity(1), curr_size(0), array(new T[capacity]) {}
+    // Constructors
+    ABS() : capacity_(1), curr_size_(0), array_(new T[1]) {}
+    explicit ABS(size_t capacity) {
+        array_ = new T[capacity];
+        capacity_ = capacity;
+        curr_size_ = 0;
+    }
 
-	explicit ABS(const size_t capacity) {
-	this->array = new T[capacity];
-	this->capacity = capacity;
-	curr_size = 0;
-}
     ABS(const ABS& other) {
-        array = new T[other.capacity];
-		std::copy(other.array, other.array + other.curr_size, array);
-        capacity_ = other.capacity;
-        curr_size_ = other.curr_size;
+        array_ = new T[other.capacity_];
+
+        for (size_t i = 0; i < other.curr_size_; i++) {
+            array_[i] = other.array_[i];
+        }
+
+        capacity_ = other.capacity_;
+        curr_size_ = other.curr_size_;
     }
 
     ABS& operator=(const ABS& rhs) {
         if (this == &rhs) { return *this; }
-        T* newArr = new T[rhs.capacity];
-        size_t newCap = rhs.capacity;
-        size_t newSize = rhs.curr_size;
+        T* newArr = rhs.array_;
+        size_t newCap = rhs.capacity_;
+        size_t newSize = rhs.curr_size_;
 
-        delete[] array;
+        delete[] array_;
 
-        array = newArr;
-        capacity = newCap;
-        curr_size = newSize;
+        array_ = newArr;
+        capacity_ = newCap;
+        curr_size_ = newSize;
 
         return *this;
     }
 
-
     ABS(ABS&& other) noexcept {
-        T* newArr = other.array;
-        size_t newCap = other.capacity;
-        size_t newSize = other.curr_size;
+        T* newArr = other.array_;
+        size_t newCap = other.capacity_;
+        size_t newSize = other.curr_size_;
 
-        array = newArr;
-        capacity = newCap;
-        curr_size = newSize;
+        array_ = newArr;
+        capacity_ = newCap;
+        curr_size_ = newSize;
 
-        other.array = nullptr;
-        other.capacity = 0;
-        other.curr_size = 0;
+        other.array_ = nullptr;
+        other.capacity_ = 0;
+        other.curr_size_ = 0;
     }
 
-
     ABS& operator=(ABS&& rhs) noexcept {
-		if (this != &rhs) { return *this; }
-			T* newArr = rhs.array;
-			size_t newCapacity = rhs.capacity;
-			size_t newSize = rhs.curr_size;
-		}
+        if (this == &rhs) { return *this; }
+        T* newArr = rhs.array_;
+        size_t newCap = rhs.capacity_;
+        size_t newSize = rhs.curr_size_;
 
-		delete[] array;
+        delete[] array_;
 
-		array = newArr;
-		capacity = newCapacity;
-		curr_size = newSize;
+        array_ = newArr;
+        capacity_ = newCap;
+        curr_size_ = newSize;
 
-		rhs.array = nullptr;
-		rhs.capacity = 0;
-		rhs.curr_size = 0;
+        rhs.array_ = nullptr;
+        rhs.capacity_ = 0;
+        rhs.curr_size_ = 0;
 
-		return *this;
-}
+        return *this;
+    }
 
-    ~ABS() noexcept override {
-		delete[] array;
-		curr_size = 0;
-		capacity = 0;
-}
+    ~ABS() noexcept {
+        delete[] array_;
+        curr_size_ = 0;
+        capacity_ = 0;
+    }
 
     // Get the number of items in the ABS
-    [[nodiscard]] size_t getSize() const noexcept override { return curr_size; }
+    [[nodiscard]] size_t getSize() const noexcept override { return curr_size_; }
 
     // Get the max size of the ABS
-    [[nodiscard]] size_t getMaxCapacity() const noexcept { return capacity; }
+    [[nodiscard]] size_t getMaxCapacity() const noexcept { return capacity_; }
 
     // Return underlying data for the stack
-    [[nodiscard]] T* getData() const noexcept { return array; }
+    [[nodiscard]] T* getData() const noexcept { return array_; }
 
     // Push item onto the stack
     void push(const T& data) override {
-		if (curr_size >= capacity) {
-			T* newArr = new T[capacity * scale_factor];
-			std::copy(array, array + capacity, newArr);
-			delete[] array;
-			array = newArr;
-			capacity *= scale_factor;
-		}
-	curr_size++;
-	array[curr_size - 1] = data;
-	}
+        if (curr_size_ >= capacity_) {
+            T* newArr = new T[capacity_*scale_factor_];
+            std::copy(array_, array_+ curr_size_, newArr);
+            delete[] array_;
+            array_ = newArr;
+            capacity_ *= scale_factor_;
+        }
+
+        curr_size_++;
+        array_[curr_size_-1] = data;
+    }
 
     T peek() const override {
-		if (curr_size == 0) {
-			throw std::out_of_range("Current array is empty");
-		}
-	return array[curr_size - 1];
-	}
+        if (curr_size_ == 0) { throw std::runtime_error("Current array is empty"); }
+        return array_[curr_size_-1];
+    }
 
     T pop() override {
-        if (curr_size == 0) {
-			throw std::runtime_error("Current array is empty");
-			return array[curr_size - 1];
-	}
+        if (curr_size_ == 0) { throw std::runtime_error("Current array is empty"); }
 
-
-        T value = array[curr_size - 1];
+        T value = array_[curr_size_-1];
         curr_size_--;
 
-        if (curr_size < capacity / 2) {
-            T* newArr = new T[capacity / scale_factor];
-            std::copy(array, array + curr_size, newArr);
-            delete[] array;
-            array = newArr;
-            capacity /= scale_factor;
+        if (curr_size_ < capacity_/2) {
+            T* newArr = new T[capacity_/scale_factor_];
+            std::copy(array_, array_+curr_size_, newArr);
+            delete[] array_;
+            array_ = newArr;
+            capacity_ /= scale_factor_;
         }
 
         return value;
     }
 
 private:
-    size_t capacity;
-    size_t curr_size;
-    T* array;
-    static constexpr size_t scale_factor = 2;
+    size_t capacity_;
+    size_t curr_size_;
+    T* array_;
+    static constexpr size_t scale_factor_ = 2;
 };

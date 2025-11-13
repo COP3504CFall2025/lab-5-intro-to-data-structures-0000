@@ -6,8 +6,6 @@
 #include "LinkedList.hpp"
 #include <utility>
 
-
-
 template <typename T>
 class LLDQ : public DequeInterface<T> {
 private:
@@ -19,56 +17,56 @@ public:
 
     // Core Insertion Operations
     void pushFront(const T& item) override {
-		list.addHead(item);
-	}
+        list.addHead(item);
+    }
+
     void pushBack(const T& item) override {
-		list.addTail(item);
-	}
+        list.addTail(item);
+    }
 
     // Core Removal Operations
     T popFront() override {
         if (list.getCount() == 0) {
-			throw std::runtime_error("List is empty cannot pop element");
-		}
+            throw std::runtime_error("List is empty, cannot pop element");
+        }
 
         T headData = list.getHead()->data;
-
         list.removeHead();
         return headData;
     }
 
     T popBack() override {
-		if (list.getCount() == 0) {
-			throw std::runtime_error("List is empty cannot pop element");
-		}
+        if (list.getCount() == 0) {
+            throw std::runtime_error("List is empty, cannot pop element");
+        }
 
-        T headData = list.getTail()->data;
-
+        T tailData = list.getTail()->data;
         list.removeTail();
         return tailData;
     }
 
-
     // Element Accessors
     const T& front() const override {
-		if (list.getCount() == 0) {
-			throw std::runtime_error( throw std::runtime_error("List is empty cannot pop element");
-		}
-		list.getHead();
-	}
+        if (list.getCount() == 0) {
+            throw std::runtime_error("List is empty, cannot access front");
+        }
+        return list.getHead()->data;
+    }
+
     const T& back() const override {
-		if (list.getCount() == 0) {
-			throw std::runtime_error( throw std::runtime_error("List is empty cannot pop element");
-		}
-		list.getTail();
-	}
+        if (list.getCount() == 0) {
+            throw std::runtime_error("List is empty, cannot access back");
+        }
+        return list.getTail()->data;
+    }
 
     // Getter
     std::size_t getSize() const noexcept override {
-		return list.getCount();
-	}
+        return list.getCount();
+    }
 
-	void printForward() const {
+    // Debug functions
+    void printForward() const {
         list.printForward();
     }
 
@@ -76,9 +74,3 @@ public:
         list.printReverse();
     }
 };
-
-
-
-
-
-
