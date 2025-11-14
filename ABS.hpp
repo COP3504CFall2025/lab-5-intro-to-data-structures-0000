@@ -90,7 +90,7 @@ public:
         curr_size_++;
     }
 
-    T& peek() const override {
+    const T& peek() const override {
         if (curr_size_ == 0) throw std::runtime_error("Stack is empty");
         return array_[curr_size_ - 1];
     }
