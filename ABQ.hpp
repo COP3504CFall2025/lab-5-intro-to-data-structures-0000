@@ -144,6 +144,7 @@ public:
         T value = array_[front_];
         front_ = (front_ + 1) % capacity_;
         --curr_size_;
+        shrinkIfNeeded();
         return value;
     }
 };
