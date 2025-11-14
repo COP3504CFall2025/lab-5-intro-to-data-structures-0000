@@ -3,180 +3,176 @@
 using namespace std;
 
 template <typename T>
-struct Node {
-    T data;
-    Node<T>* prev;
-    Node<T>* next;
-
-    Node(const T& d) : data(d), prev(nullptr), next(nullptr) {}
-};
-
-template <typename T>
 class LinkedList {
-public:
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node* prev;
+        Node(const T& d) : data(d), next(nullptr), prev(nullptr) {}
+    };
 
-    // --- Behaviors ---
+    Node* head;
+    Node* tail;
+    unsigned int count;
+
+public:
+    // Behaviors
     void printForward() const {
-        Node<T>* cur = head;
+        if (!head) return;
+        Node* cur = head;
         while (cur) {
             cout << cur->data << " ";
             cur = cur->next;
         }
+        cout << endl;
     }
 
     void printReverse() const {
-        Node<T>* cur = tail;
+        if (!tail) return;
+        Node* cur = tail;
         while (cur) {
             cout << cur->data << " ";
             cur = cur->prev;
         }
+        cout << endl;
     }
 
-    // --- Accessors ---
+    // Accessors
     [[nodiscard]] unsigned int getCount() const {
         return count;
     }
 
-    Node<T>* getHead() { return head; }
-    const Node<T>* getHead() const { return head; }
+    Node* getHead() {
+        return head;
+    }
+    const Node* getHead() const {
+        return head;
+    }
 
-    Node<T>* getTail() { return tail; }
-    const Node<T>* getTail() const { return tail; }
+    Node* getTail() {
+        return tail;
+    }
+    const Node* getTail() const {
+        return tail;
+    }
 
-    // --- Insertion ---
+    // Insertion
     void addHead(const T& data) {
-        Node<T>* newNode = new Node<T>(data);
+        Node* n = new Node(data);
 
-        if (!head) {
-            head = tail = newNode;
-        } else {
-            newNode->next = head;
-            head->prev = newNode;
-            head = newNode;
-        }
+        n->next = head;
+        if (head) head->prev = n;
+        head = n;
 
-        ++count;
+        if (!tail) tail = n;
+
+        count++;
     }
 
     void addTail(const T& data) {
-        Node<T>* newNode = new Node<T>(data);
+        Node* n = new Node(data);
 
-        if (!tail) {
-            head = tail = newNode;
-        } else {
-            newNode->prev = tail;
-            tail->next = newNode;
-            tail = newNode;
-        }
+        n->prev = tail;
+        if (tail) tail->next = n;
+        tail = n;
 
-        ++count;
+        if (!head) head = n;
+
+        count++;
     }
 
-    // --- Removal ---
+    // Removal
     bool removeHead() {
         if (!head) return false;
 
-        Node<T>* temp = head;
+        Node* cur = head;
+        head = head->next;
 
-        if (head == tail) {
-            head = tail = nullptr;
-        } else {
-            head = head->next;
+        if (head)
             head->prev = nullptr;
-        }
+        else
+            tail = nullptr;
 
-        delete temp;
-        --count;
+        delete cur;
+        count--;
         return true;
     }
 
     bool removeTail() {
         if (!tail) return false;
 
-        Node<T>* temp = tail;
+        Node* cur = tail;
+        tail = tail->prev;
 
-        if (head == tail) {
-            head = tail = nullptr;
-        } else {
-            tail = tail->prev;
+        if (tail)
             tail->next = nullptr;
-        }
+        else
+            head = nullptr;
 
-        delete temp;
-        --count;
+        delete cur;
+        count--;
         return true;
     }
 
     void Clear() {
-        Node<T>* cur = head;
-
+        Node* cur = head;
         while (cur) {
-            Node<T>* next = cur->next;
+            Node* nxt = cur->next;
             delete cur;
-            cur = next;
+            cur = nxt;
         }
-
         head = tail = nullptr;
         count = 0;
     }
 
-    // --- Operators ---
-    // Move assignment
+    // Operators
     LinkedList<T>& operator=(LinkedList<T>&& other) noexcept {
-        if (this == &other) return *this;
+        if (this != &other) {
+            Clear();
+            head = other.head;
+            tail = other.tail;
+            count = other.count;
 
-        Clear();
-        head = other.head;
-        tail = other.tail;
-        count = other.count;
-
-        other.head = other.tail = nullptr;
-        other.count = 0;
-
-        return *this;
-    }
-
-    // Copy assignment
-    LinkedList<T>& operator=(const LinkedList<T>& rhs) {
-        if (this == &rhs) return *this;
-
-        Clear();
-
-        Node<T>* cur = rhs.head;
-        while (cur) {
-            addTail(cur->data);
-            cur = cur->next;
+            other.head = nullptr;
+            other.tail = nullptr;
+            other.count = 0;
         }
-
         return *this;
     }
 
-    // --- Constructors/Destructor ---
+    LinkedList<T>& operator=(const LinkedList<T>& rhs) {
+        if (this != &rhs) {
+            Clear();
+            Node* cur = rhs.head;
+            while (cur) {
+                addTail(cur->data);
+                cur = cur->next;
+            }
+        }
+        return *this;
+    }
+
+    // Construction / Destruction
     LinkedList() : head(nullptr), tail(nullptr), count(0) {}
 
-    // Copy constructor
     LinkedList(const LinkedList<T>& list) : head(nullptr), tail(nullptr), count(0) {
-        Node<T>* cur = list.head;
+        Node* cur = list.head;
         while (cur) {
             addTail(cur->data);
             cur = cur->next;
         }
     }
 
-    // Move constructor
     LinkedList(LinkedList<T>&& other) noexcept
-        : head(other.head), tail(other.tail), count(other.count)
-    {
-        other.head = other.tail = nullptr;
+        : head(other.head), tail(other.tail), count(other.count) {
+
+        other.head = nullptr;
+        other.tail = nullptr;
         other.count = 0;
     }
 
     ~LinkedList() {
         Clear();
     }
-
-private:
-    Node<T>* head;
-    Node<T>* tail;
-    unsigned int count;
 };

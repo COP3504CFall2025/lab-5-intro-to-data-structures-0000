@@ -2,51 +2,55 @@
 
 #include "Interfaces.hpp"
 #include "LinkedList.hpp"
-#include <stdlib.h>
 #include <stdexcept>
 
 template <typename T>
 class LLS : public StackInterface<T> {
 private:
     LinkedList<T> list;
+
 public:
     // Constructor
-    LLS() = list(LinkedList<T>()) {};
+    LLS() : list(LinkedList<T>()) {}
 
     // Insertion
     void push(const T& item) override {
-		list.addHead(item);
-	}
+        list.addHead(item);
+    }
 
     // Deletion
-    T pop() override [
-		if (list.getCount() == 0) {
-			throw std::runtime_error("List is empty cannot pop element");
-		}
+    T pop() override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("List is empty");
+        }
 
-		const Node<T>* head = list.getHead();
-		T HeadData = head->data;
-		list.removeHead();
-		return headData;
-	}
+        const auto* head = list.getHead();
+        T headData = head->data;
+        list.removeHead();
+        return headData;
+    }
 
     // Access
     T peek() const override {
-		if (list.getCount() == 0 {
-			throw std::runtime_error("List is empty cannot pop element");
-		}
+        if (list.getCount() == 0) {
+            throw std::runtime_error("List is empty");
+        }
 
-		const Node<T>* head = list.getHead();
-		return head->data;
+        const auto* head = list.getHead();
+        return head->data;
+    }
 
-    //Getters
-    std::size_t getSize() const noexcept override;
+    // Getter
+    std::size_t getSize() const noexcept override {
+        return list.getCount();
+    }
 
-	void printForward() const {
-		list.printForward();
-	}
+    // Debug functions
+    void printForward() const {
+        list.printForward();
+    }
 
-	void printBackward() const {
-		list.printReverse();
-	}
+    void printBackward() const {
+        list.printReverse();
+    }
 };

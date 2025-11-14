@@ -27,7 +27,7 @@ public:
     // Core Removal Operations
     T popFront() override {
         if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty, cannot pop element");
+            throw std::runtime_error("List is empty");
         }
 
         T headData = list.getHead()->data;
@@ -37,7 +37,7 @@ public:
 
     T popBack() override {
         if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty, cannot pop element");
+            throw std::runtime_error("List is empty");
         }
 
         T tailData = list.getTail()->data;
@@ -48,14 +48,14 @@ public:
     // Element Accessors
     const T& front() const override {
         if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty, cannot access front");
+            throw std::runtime_error("List is empty");
         }
         return list.getHead()->data;
     }
 
     const T& back() const override {
         if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty, cannot access back");
+            throw std::runtime_error("List is empty");
         }
         return list.getTail()->data;
     }
