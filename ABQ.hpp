@@ -31,6 +31,23 @@ class ABQ : public QueueInterface<T> {
         back_ = curr_size_;
     }
 
+    void shrinkIfNeeded() {
+    if (curr_size_ < capacity_ / 2 && capacity_ > 1) {
+        std::size_t newCapacity = capacity_ / 2;
+        T* newArray = new T[newCapacity];
+
+        for (std::size_t i = 0; i < curr_size_; ++i)
+            newArray[i] = array_[(front_ + i) % capacity_];
+
+        delete[] array_;
+        array_ = newArray;
+        capacity_ = newCapacity;
+        front_ = 0;
+        back_ = curr_size_;
+    }
+}
+
+
 public:
     ABQ() {
         capacity_ = 1;
@@ -117,7 +134,7 @@ public:
         ++curr_size_;
     }
 
-    T& peek() const override {
+    const T& peek() const override {
         if (curr_size_ == 0) throw std::runtime_error("Queue is empty");
         return array_[front_];
     }
