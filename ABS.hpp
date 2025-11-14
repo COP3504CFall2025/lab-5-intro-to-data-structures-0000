@@ -90,7 +90,7 @@ public:
         curr_size_++;
     }
 
-    T peek() const override {
+    T& peek() const override {
         if (curr_size_ == 0) throw std::runtime_error("Stack is empty");
         return array_[curr_size_ - 1];
     }
@@ -104,7 +104,7 @@ public:
             std::copy(array_, array_ + curr_size_, newArr);
             delete[] array_;
             array_ = newArr;
-            capacity_ = newCap;
+            capacity_ /= scale_factor_;
         }
 
         return value;
