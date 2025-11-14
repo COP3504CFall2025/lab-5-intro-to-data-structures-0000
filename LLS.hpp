@@ -5,12 +5,12 @@
 #include <stdexcept>
 
 template <typename T>
-class LLStack : public StackInterface<T> {
+class LLS : public StackInterface<T> {
 private:
     LinkedList<T> list;
 public:
     // Constructor
-    LLStack() = default;
+    LLS() = default;
 
     // Insertion
     void push(const T& item) override {
