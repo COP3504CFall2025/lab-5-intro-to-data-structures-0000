@@ -1,42 +1,72 @@
 #pragma once
 
-#include <cstddef>
+#include "Interfaces.hpp"
+#include "LinkedList.hpp"
 #include <stdexcept>
 
 template <typename T>
-class StackInterface {
+class LLDeque : public DequeInterface<T> {
+private:
+    LinkedList<T> list;
 public:
-    virtual ~StackInterface() = default;
+    // Constructor
+    LLDeque() = default;
 
-    virtual void push(const T& item) = 0;
-    virtual T pop() = 0;
-    virtual const T& peek() const = 0;
-    virtual std::size_t getSize() const noexcept = 0;
-};
+    // Insertion
+    void pushFront(const T& item) override {
+        list.addHead(item);
+    }
 
+    void pushBack(const T& item) override {
+        list.addTail(item);
+    }
 
-template <typename T>
-class QueueInterface {
-public:
-    virtual ~QueueInterface() = default;
+    // Deletion
+    T popFront() override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Deque is empty");
+        }
+        T val = list.getHead()->data;
+        list.removeHead();
+        return val;
+    }
 
-    virtual void push(const T& item) = 0;
-    virtual T pop() = 0;
-    virtual const T& peek() const = 0;
-    virtual std::size_t getSize() const noexcept = 0;
-};
+    T popBack() override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Deque is empty");
+        }
+        T val = list.getTail()->data;
+        list.removeTail();
+        return val;
+    }
 
+    // Access
+    const T& front() const override {
+        auto head = list.getHead();
+        if (!head) {
+            throw std::runtime_error("Deque is empty");
+        }
+        return head->data;
+    }
 
-template <typename T>
-class DequeInterface {
-public:
-    virtual ~DequeInterface() = default;
+    const T& back() const override {
+        auto tail = list.getTail();
+        if (!tail) {
+            throw std::runtime_error("Deque is empty");
+        }
+        return tail->data;
+    }
 
-    virtual void pushFront(const T& item) = 0;
-    virtual void pushBack(const T& item) = 0;
-    virtual T popFront() = 0;
-    virtual T popBack() = 0;
-    virtual const T& front() const = 0;
-    virtual const T& back() const = 0;
-    virtual std::size_t getSize() const noexcept = 0;
+    // Getter
+    std::size_t getSize() const noexcept override {
+        return list.getCount();
+    }
+
+    void printForward() const {
+        list.printForward();
+    }
+
+    void printReverse() const {
+        list.printReverse();
+    }
 };

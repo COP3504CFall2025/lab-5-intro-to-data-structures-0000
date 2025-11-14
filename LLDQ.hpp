@@ -5,12 +5,12 @@
 #include <stdexcept>
 
 template <typename T>
-class LLDeque : public DequeInterface<T> {
+class LLDQ : public DequeInterface<T> {
 private:
     LinkedList<T> list;
 public:
     // Constructor
-    LLDeque() = default;
+    LLDQ() = default;
 
     // Insertion
     void pushFront(const T& item) override {
