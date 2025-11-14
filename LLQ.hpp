@@ -43,3 +43,9 @@ public:
 
     void printForward() const {
         list.printForward();
+    }
+
+    void printReverse() const {
+        list.printReverse();
+    }
+};
