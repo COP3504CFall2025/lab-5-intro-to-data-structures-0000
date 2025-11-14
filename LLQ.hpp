@@ -13,12 +13,12 @@ public:
     LLQ() = default;
 
     // Insertion
-    void push(const T& item) override {
+    void enqueue(const T& item) override {
         list.addTail(item);
     }
 
     // Deletion
-    T pop() override {
+    T dequeue() override {
         if (list.getCount() == 0) {
             throw std::runtime_error("Queue is empty");
         }
