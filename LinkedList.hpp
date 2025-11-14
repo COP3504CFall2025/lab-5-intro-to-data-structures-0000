@@ -7,20 +7,20 @@ class LinkedList {
 private:
     struct Node {
         T data;
-        Node<T>* next;
-        Node<T>* prev;
+        Node* next;
+        Node* prev;
         Node(const T& d) : data(d), next(nullptr), prev(nullptr) {}
     };
 
-    Node<T>* head;
-    Node<T>* tail;
+    Node* head;
+    Node* tail;
     unsigned int count;
 
 public:
     // Behaviors
     void printForward() const {
         if (!head) return;
-        Node<T>* cur = head;
+        Node* cur = head;
         while (cur) {
             cout << cur->data << " ";
             cur = cur->next;
@@ -30,7 +30,7 @@ public:
 
     void printReverse() const {
         if (!tail) return;
-        Node<T>* cur = tail;
+        Node* cur = tail;
         while (cur) {
             cout << cur->data << " ";
             cur = cur->prev;
@@ -43,23 +43,15 @@ public:
         return count;
     }
 
-    Node<T>* getHead() {
-        return head;
-    }
-    const Node<T>* getHead() const {
-        return head;
-    }
+    Node* getHead() { return head; }
+    const Node* getHead() const { return head; }
 
-    Node<T>* getTail() {
-        return tail;
-    }
-    const Node<T>* getTail() const {
-        return tail;
-    }
+    Node* getTail() { return tail; }
+    const Node* getTail() const { return tail; }
 
     // Insertion
     void addHead(const T& data) {
-        Node<T>* n = new Node(data);
+        Node* n = new Node(data);
 
         n->next = head;
         if (head) head->prev = n;
@@ -71,7 +63,7 @@ public:
     }
 
     void addTail(const T& data) {
-        Node<T>* n = new Node(data);
+        Node* n = new Node(data);
 
         n->prev = tail;
         if (tail) tail->next = n;
@@ -86,7 +78,7 @@ public:
     bool removeHead() {
         if (!head) return false;
 
-        Node<T>* cur = head;
+        Node* cur = head;
         head = head->next;
 
         if (head)
@@ -102,7 +94,7 @@ public:
     bool removeTail() {
         if (!tail) return false;
 
-        Node<T>* cur = tail;
+        Node* cur = tail;
         tail = tail->prev;
 
         if (tail)
@@ -116,9 +108,9 @@ public:
     }
 
     void Clear() {
-        Node<T>* cur = head;
+        Node* cur = head;
         while (cur) {
-            Node<T>* nxt = cur->next;
+            Node* nxt = cur->next;
             delete cur;
             cur = nxt;
         }
@@ -144,7 +136,7 @@ public:
     LinkedList<T>& operator=(const LinkedList<T>& rhs) {
         if (this != &rhs) {
             Clear();
-            Node<T>* cur = rhs.head;
+            Node* cur = rhs.head;
             while (cur) {
                 addTail(cur->data);
                 cur = cur->next;
@@ -157,7 +149,7 @@ public:
     LinkedList() : head(nullptr), tail(nullptr), count(0) {}
 
     LinkedList(const LinkedList<T>& list) : head(nullptr), tail(nullptr), count(0) {
-        Node<T>* cur = list.head;
+        Node* cur = list.head;
         while (cur) {
             addTail(cur->data);
             cur = cur->next;
