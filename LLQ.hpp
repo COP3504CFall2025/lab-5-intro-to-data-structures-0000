@@ -2,7 +2,6 @@
 
 #include "Interfaces.hpp"
 #include "LinkedList.hpp"
-#include <stdlib.h>
 #include <stdexcept>
 
 template <typename T>
@@ -11,45 +10,36 @@ private:
     LinkedList<T> list;
 public:
     // Constructor
-    LLQ() : list(LinkedList<T>()) {}
+    LLQ() = default;
 
     // Insertion
-    void enqueue(const T& item) override {
-		list.addTail(item);
-	}
+    void push(const T& item) override {
+        list.addTail(item);
+    }
+
     // Deletion
-    T dequeue() override {
-		if (list.getCount() == 0) {
-			throw std::runtime_error("List is empty");
-		}
-
-		T headData = list.getHead()->data;
-
-		list.removeHead();
-		return headData;
-	}
+    T pop() override {
+        if (list.getCount() == 0) {
+            throw std::runtime_error("Queue is empty");
+        }
+        T val = list.getHead()->data;
+        list.removeHead();
+        return val;
+    }
 
     // Access
-    T peek() const override {
-		if (list.getCount() == 0) {
-			throw std::runtime_error("List is empty");
-		}
-
-		const Node<T>* head = list.getHead();
-		return head->data;
-	}
+    const T& peek() const override {
+        auto head = list.getHead();
+        if (!head) {
+            throw std::runtime_error("Queue is empty");
+        }
+        return head->data;
+    }
 
     // Getter
     std::size_t getSize() const noexcept override {
-		return list.getCount();
-	}
+        return list.getCount();
+    }
 
-	void printForward() const {
-		list.printForward();
-	}
-
-	void printReverse() const {
-		list.printReverse();
-	}
-
-};
+    void printForward() const {
+        list.printForward();

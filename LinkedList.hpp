@@ -107,7 +107,7 @@ public:
         return true;
     }
 
-    void Clear() {
+    void clear() {
         Node* cur = head;
         while (cur) {
             Node* nxt = cur->next;
@@ -121,7 +121,7 @@ public:
     // Operators
     LinkedList<T>& operator=(LinkedList<T>&& other) noexcept {
         if (this != &other) {
-            Clear();
+            clear();
             head = other.head;
             tail = other.tail;
             count = other.count;
@@ -135,7 +135,7 @@ public:
 
     LinkedList<T>& operator=(const LinkedList<T>& rhs) {
         if (this != &rhs) {
-            Clear();
+            clear();
             Node* cur = rhs.head;
             while (cur) {
                 addTail(cur->data);
@@ -165,6 +165,6 @@ public:
     }
 
     ~LinkedList() {
-        Clear();
+        clear();
     }
 };

@@ -1,21 +1,18 @@
 #pragma once
 
-#include <cstddef>
-#include <stdexcept>
 #include "Interfaces.hpp"
 #include "LinkedList.hpp"
-#include <utility>
+#include <stdexcept>
 
 template <typename T>
-class LLDQ : public DequeInterface<T> {
+class LLDeque : public DequeInterface<T> {
 private:
     LinkedList<T> list;
-
 public:
     // Constructor
-    LLDQ() : list(LinkedList<T>()) {}
+    LLDeque() = default;
 
-    // Core Insertion Operations
+    // Insertion
     void pushFront(const T& item) override {
         list.addHead(item);
     }
@@ -24,40 +21,40 @@ public:
         list.addTail(item);
     }
 
-    // Core Removal Operations
+    // Deletion
     T popFront() override {
         if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty");
+            throw std::runtime_error("Deque is empty");
         }
-
-        T headData = list.getHead()->data;
+        T val = list.getHead()->data;
         list.removeHead();
-        return headData;
+        return val;
     }
 
     T popBack() override {
         if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty");
+            throw std::runtime_error("Deque is empty");
         }
-
-        T tailData = list.getTail()->data;
+        T val = list.getTail()->data;
         list.removeTail();
-        return tailData;
+        return val;
     }
 
-    // Element Accessors
+    // Access
     const T& front() const override {
-        if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty");
+        auto head = list.getHead();
+        if (!head) {
+            throw std::runtime_error("Deque is empty");
         }
-        return list.getHead()->data;
+        return head->data;
     }
 
     const T& back() const override {
-        if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty");
+        auto tail = list.getTail();
+        if (!tail) {
+            throw std::runtime_error("Deque is empty");
         }
-        return list.getTail()->data;
+        return tail->data;
     }
 
     // Getter
@@ -65,7 +62,6 @@ public:
         return list.getCount();
     }
 
-    // Debug functions
     void printForward() const {
         list.printForward();
     }

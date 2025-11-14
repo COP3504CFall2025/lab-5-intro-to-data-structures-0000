@@ -5,39 +5,35 @@
 #include <stdexcept>
 
 template <typename T>
-class LLS : public StackInterface<T> {
+class LLStack : public StackInterface<T> {
 private:
     LinkedList<T> list;
-
 public:
     // Constructor
-    LLS() : list(LinkedList<T>()) {}
+    LLStack() = default;
 
     // Insertion
     void push(const T& item) override {
-        list.addHead(item);
+        list.addTail(item);
     }
 
     // Deletion
     T pop() override {
         if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty");
+            throw std::runtime_error("Stack is empty");
         }
-
-        const auto* head = list.getHead();
-        T headData = head->data;
-        list.removeHead();
-        return headData;
+        T val = list.getTail()->data;
+        list.removeTail();
+        return val;
     }
 
     // Access
-    T peek() const override {
-        if (list.getCount() == 0) {
-            throw std::runtime_error("List is empty");
+    const T& peek() const override {
+        auto tail = list.getTail();
+        if (!tail) {
+            throw std::runtime_error("Stack is empty");
         }
-
-        const auto* head = list.getHead();
-        return head->data;
+        return tail->data;
     }
 
     // Getter
@@ -45,12 +41,11 @@ public:
         return list.getCount();
     }
 
-    // Debug functions
     void printForward() const {
         list.printForward();
     }
 
-    void printBackward() const {
+    void printReverse() const {
         list.printReverse();
     }
 };
