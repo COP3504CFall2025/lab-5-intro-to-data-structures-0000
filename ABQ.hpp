@@ -117,7 +117,7 @@ public:
         ++curr_size_;
     }
 
-    T peek() const override {
+    T& peek() const override {
         if (curr_size_ == 0) throw std::runtime_error("Queue is empty");
         return array_[front_];
     }
